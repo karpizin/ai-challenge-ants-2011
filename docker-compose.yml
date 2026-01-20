@@ -1,14 +1,35 @@
 version: '3.8'
 
 services:
+  tournament:
+    build: .
+    container_name: ants-tournament
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["python3", "run_tournament.py"]
+    restart: unless-stopped
+
+  visualizer:
+    build: .
+    container_name: ants-visualizer
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["python3", "visualizer_app.py"]
+    restart: unless-stopped
+
+  # Engine service kept for manual runs if needed
   engine:
     build: .
     container_name: ants-engine
     volumes:
       - .:/app
-      - ./replays:/app/replays
     environment:
       - PYTHONUNBUFFERED=1
-    # Чтобы контейнер не выключался сразу, если мы хотим зайти внутert
     tty: true
     stdin_open: true

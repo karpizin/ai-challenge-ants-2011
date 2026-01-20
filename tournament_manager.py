@@ -142,6 +142,7 @@ class TournamentManager:
 
         # Build playgame.py command
         replay_filename = f"{match_id}.replay"
+        player_names = ",".join([p['name'] for p in players])
         cmd = [
             "python3", "engine/playgame.py",
             "--map_file", map_path,
@@ -150,7 +151,8 @@ class TournamentManager:
             "--log_stdout",
             "--turns", "500",
             "--serial",
-            "--game", str(match_id)
+            "--game", str(match_id),
+            "--player_names", player_names
         ] + bot_cmds
 
         logger.info(f"Starting match {match_id}: {' vs '.join([p['name'] for p in players])} on {map_path}")

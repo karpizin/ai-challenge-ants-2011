@@ -20,6 +20,10 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no
 
 WORKDIR /app
 
+# Установка зависимостей Python
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
 # Копируем всё содержимое проекта
 COPY . .
 

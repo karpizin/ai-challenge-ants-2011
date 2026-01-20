@@ -1,63 +1,112 @@
-# Ants AI Challenge 2011 (Restoration Project) 🐜
+# Ants AI Tournament Platform 🐜
 
-A robust restoration of the legendary **Google AI Challenge 2011 (Ants)**. This project provides a complete local environment for developing, testing, and ranking AI bots across multiple programming languages.
+A comprehensive platform for developing, testing, and running tournaments for AI bots based on the Google AI Challenge "Ants" engine. This project provides a full-stack environment including an execution engine, a tournament manager with ELO rating system, and a web-based visualizer.
 
-## 🕹 Game Overview
-You control a colony of ants on a 2D grid (usually a toroidal map).
-- **Objectives**: Collect food to spawn more ants, defend your hills, and destroy enemy hills.
-- **Fog of War**: You can only see within a specific radius of your ants.
-- **Toroidal Topology**: Maps often wrap around edges (North to South, East to West).
+---
 
-## 🚀 Features
-- **Original Engine**: The official Python-based game engine (`playgame.py`).
-- **Dockerized Environment**: Pre-configured support for **Python, Java, C++, Node.js, Go, and Rust**.
-- **Massive Map Library**: Over 1,000 official maps included.
-- **Multi-language Starters**: Ready-to-use starter packages for 25+ languages.
-- **Tournament Manager**: Automated Round-Robin tournament system with SQLite backend and ELO ratings.
-- **Web Visualizer**: FastAPI-based dashboard to view leaderboard and watch match replays.
+## 🌟 Features
 
-## 📦 Getting Started (Local)
+- **Multi-Bot Support**: Support for bots written in Python, C++, Java, Go, and more.
+- **Automated Tournament**: A background worker that picks random maps and bots to run matches continuously.
+- **ELO Rating System**: Automatic skill estimation for every bot based on match results.
+- **Web Dashboard**: 
+  - Real-time Leaderboard.
+  - Recent Match History.
+  - Built-in Replay Visualizer (watch matches directly in your browser).
+- **Dockerized Environment**: One-command setup for the entire infrastructure.
+- **Improved Naming**: Bots are identified by their registered names (e.g., `ExplorerBot`) rather than generic filenames.
 
-### 1. Run a Tournament
-Register the baseline bots and start 10 rounds of matches:
+---
+
+## 🏗 System Architecture
+
+The project is divided into three main components:
+
+1.  **Tournament Worker**: Orchestrates matches, selects maps/players, and updates the SQLite database.
+2.  **Game Engine**: The core logic (forked from the original competition) that simulates the ants' world and enforces rules.
+3.  **Visualizer App**: A FastAPI web server that provides the dashboard and serves the HTML5 replay tool.
+
+---
+
+## 🚀 Quick Start (Docker)
+
+The easiest way to run the tournament and see your bots in action.
+
+### 1. Requirements
+- **Docker** and **Docker Compose** installed.
+
+### 2. Launch the Platform
 ```bash
-python3 register_new_bots.py
-python3 run_tournament.py --rounds 10
+docker-compose up -d --build
 ```
 
-### 2. View Leaderboard & Replays
-Start the web server:
-```bash
-python3 visualizer_app.py
-```
-Open `http://localhost:8000` in your browser.
+### 3. Access the Dashboard
+Open [http://localhost:8000](http://localhost:8000) in your browser. You will see the leaderboard and matches as they are being played.
+
+---
 
 ## 🤖 Bot Development
 
-### Baseline Bots
-We have included 10 implementation examples in the `bots/` directory:
-- `random_bot`, `statue_bot`, `lefty_bot`, `greedy_food_bot`, `explorer_bot`
-- `distance_bot` (BFS), `safety_first_bot`, `aggressive_hill_bot`, `scent_bot`, `heatmap_bot`
-
-### The Protocol
-Communication happens via `stdin` and `stdout`. Each turn, the engine sends the current visible state, and the bot must respond with commands (`o <row> <col> <dir>`) followed by `go`.
-
-Detailed specs can be found in [docs/PROTOCOL.md](docs/PROTOCOL.md).
-
-### Strategy Ideas
-Check out [docs/STRATEGY_IDEAS.md](docs/STRATEGY_IDEAS.md) for 20 algorithmic concepts to implement, ranging from simple greedy search to complex influence maps.
-
-## 🏗 Project Structure
-- `engine/`: The core Python game engine and original tools.
-- `bots/`: Place your custom bot implementations here.
-- `maps/`: A vast collection of .map files for training and testing.
-- `docs/`: Technical specifications and strategy guides.
-- `tools/`: Utility scripts for tournament management and visualization.
-
-## 🛠 Tech Stack
-- **Engine**: Python 3.11
-- **Runtimes**: OpenJDK 17, GCC, Node.js, Go, Rust (rustup)
-- **Containerization**: Docker & Docker Compose
+### How to add your own bot
+1. Create a new directory in `bots/` (e.g., `bots/my_super_bot/`).
+2. Implement your logic in a file (e.g., `MyBot.py`). You can use existing bots as templates.
+3. Open `register_new_bots.py` and add your bot to the `bots` dictionary:
+   ```python
+   "MySuperBot": "python3 bots/my_super_bot/MyBot.py"
+   ```
+4. Restart the containers:
+   ```bash
+   docker-compose restart tournament
+   ```
+   *Note: The tournament worker automatically registers new bots listed in `register_new_bots.py` upon startup.*
 
 ---
-*This project is a tribute to the original AI Challenge community. All assets are maintained for educational and historical purposes.*
+
+## 🛠 Manual Commands
+
+If you prefer to run things outside of Docker:
+
+### Setup
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Run a Single Match
+```bash
+python3 engine/playgame.py --map_file maps/maze/maze_p02_01.map \
+  --player_names "Bot1,Bot2" \
+  "python3 bots/random_bot/MyBot.py" \
+  "python3 bots/statue_bot/MyBot.py"
+```
+
+### Run the Tournament Worker
+```bash
+python3 run_tournament.py --rounds 100
+```
+
+### Run the Web Dashboard
+```bash
+python3 visualizer_app.py
+```
+
+---
+
+## 📊 Database Schema (tournament.db)
+
+- **`players`**: Stores bot names, commands, and current ELO ratings.
+- **`matches`**: Logs match timestamps and paths to replay files.
+- **`match_participants`**: Links players to matches, storing their rank and score for each game.
+
+---
+
+## 🗺 Roadmap
+- [x] Dockerization of all components.
+- [x] Accurate bot naming in replays.
+- [ ] Support for more programming languages in the default Docker image (C#, Rust).
+- [ ] Advanced analytics (win rate per map, head-to-head stats).
+- [ ] Support for "Fog of War" toggle in the visualizer.
+
+---
+© 2026 NEXTTHINGDONE. Built for the AI coding community.

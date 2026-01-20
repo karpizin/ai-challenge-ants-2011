@@ -1,2 +1,7 @@
 *.pyc
 bin/
+__pycache__/
+replays/
+tournament.db
+*.replay
+worker/

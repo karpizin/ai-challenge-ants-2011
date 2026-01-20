@@ -2,6 +2,7 @@ import argparse
 import os
 import random
 from tournament_manager import TournamentManager, logger
+from register_new_bots import register_bots
 
 def get_map_players(map_path):
     try:
@@ -15,10 +16,13 @@ def get_map_players(map_path):
 
 def main():
     parser = argparse.ArgumentParser(description="Ants Tournament Runner")
-    parser.add_argument("--rounds", type=int, default=5, help="Number of matches to run")
+    parser.add_argument("--rounds", type=int, default=100, help="Number of matches to run")
     parser.add_argument("--init", action="store_true", help="Initialize sample bots")
     parser.add_argument("--list", action="store_true", help="Show leaderboard")
     args = parser.parse_args()
+
+    # Always register bots from the bots/ folder
+    register_bots()
 
     tm = TournamentManager()
 

@@ -14,7 +14,10 @@ def register_bots():
         "SafetyFirstBot": "python3 bots/safety_first_bot/MyBot.py",
         "AggressiveHillBot": "python3 bots/aggressive_hill_bot/MyBot.py",
         "ScentBot": "python3 bots/scent_bot/MyBot.py",
-        "HeatmapBot": "python3 bots/heatmap_bot/MyBot.py"
+        "HeatmapBot": "python3 bots/heatmap_bot/MyBot.py",
+        "SampleRandom": "python3 engine/dist/sample_bots/python/RandomBot.py",
+        "SampleHunter": "python3 engine/dist/sample_bots/python/HunterBot.py",
+        "SampleGreedy": "python3 engine/dist/sample_bots/python/GreedyBot.py"
     }
     
     for name, cmd in bots.items():

@@ -225,6 +225,8 @@ def main(argv):
     log_group.add_option("--html", dest="html_file",
                          default=None,
                          help="Output file name for an html replay")
+    log_group.add_option('--player_names', dest='player_names',
+                         help="Comma-separated list of player names.")
     parser.add_option_group(log_group)
 
     (opts, args) = parser.parse_args(argv)
@@ -426,7 +428,10 @@ def run_rounds(opts,args):
         # add player names, write to proper io, reset back to normal
         if opts.log_replay:
             replay_json = json.loads(intcpt_replay_io.getvalue())
-            replay_json['playernames'] = [get_cmd_name(arg) for arg in args]
+            if opts.player_names:
+                replay_json['playernames'] = opts.player_names.split(',')
+            else:
+                replay_json['playernames'] = [get_cmd_name(arg) for arg in args]
             real_replay_io.write(json.dumps(replay_json))
             intcpt_replay_io.close()
             engine_options['replay_log'] = real_replay_io
