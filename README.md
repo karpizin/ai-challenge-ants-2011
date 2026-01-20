@@ -13,33 +13,31 @@ You control a colony of ants on a 2D grid (usually a toroidal map).
 - **Dockerized Environment**: Pre-configured support for **Python, Java, C++, Node.js, Go, and Rust**.
 - **Massive Map Library**: Over 1,000 official maps included.
 - **Multi-language Starters**: Ready-to-use starter packages for 25+ languages.
-- **Tournament Ready**: Infrastructure prepared for local Round-Robin tournaments.
+- **Tournament Manager**: Automated Round-Robin tournament system with SQLite backend and ELO ratings.
+- **Web Visualizer**: FastAPI-based dashboard to view leaderboard and watch match replays.
 
-## 📦 Getting Started (Docker)
+## 📦 Getting Started (Local)
 
-The easiest way to run the challenge is via Docker, which handles all language runtimes automatically.
-
-### 1. Build the image
+### 1. Run a Tournament
+Register the baseline bots and start 10 rounds of matches:
 ```bash
-docker-compose build
+python3 register_new_bots.py
+python3 run_tournament.py --rounds 10
 ```
 
-### 2. Run a sample match
+### 2. View Leaderboard & Replays
+Start the web server:
 ```bash
-docker-compose run --rm engine
+python3 visualizer_app.py
 ```
-By default, this runs a match between the built-in `RandomBot` and `HunterBot`.
-
-### 3. Running your own bot
-To test your custom bot (e.g., a Python bot):
-```bash
-docker-compose run --rm engine python3 engine/playgame.py \
-  --map_file maps/maze/maze_p02_01.map \
-  "python3 bots/my_bot/MyBot.py" \
-  "python3 engine/dist/sample_bots/python/RandomBot.py"
-```
+Open `http://localhost:8000` in your browser.
 
 ## 🤖 Bot Development
+
+### Baseline Bots
+We have included 10 implementation examples in the `bots/` directory:
+- `random_bot`, `statue_bot`, `lefty_bot`, `greedy_food_bot`, `explorer_bot`
+- `distance_bot` (BFS), `safety_first_bot`, `aggressive_hill_bot`, `scent_bot`, `heatmap_bot`
 
 ### The Protocol
 Communication happens via `stdin` and `stdout`. Each turn, the engine sends the current visible state, and the bot must respond with commands (`o <row> <col> <dir>`) followed by `go`.

@@ -38,6 +38,23 @@ This document summarizes the strategies of the top bots from the 2011 tournament
 
 ---
 
+## 🏗 Implemented Baseline Bots
+
+For testing and benchmarking, we have implemented 10 baseline bots in `bots/`:
+
+1.  **RandomBot**: Basic random walker.
+2.  **StatueBot**: Stationary bot (useful for testing attack logic).
+3.  **LeftyBot**: Wall-follower heuristic (always turns left if possible).
+4.  **GreedyFoodBot**: Moves directly toward the nearest visible food.
+5.  **ExplorerBot**: Prioritizes moving toward `UNSEEN` tiles.
+6.  **DistanceBot**: Uses Breadth-First Search (BFS) for optimal pathfinding to food.
+7.  **SafetyFirstBot**: Retreats if enemies are too close, otherwise collects food.
+8.  **AggressiveHillBot**: Prioritizes attacking enemy hills over collecting food.
+9.  **ScentBot**: Uses a "pheromone" map to avoid recently visited tiles.
+10. **HeatmapBot**: Implements a simple Influence Map (attractive food, repulsive enemies).
+
+---
+
 ## 📂 Resource Links (Offline Copy)
 - `docs/specification.html` — Full game mechanics description.
 - `docs/strategy_guide.html` — Official development tips.
