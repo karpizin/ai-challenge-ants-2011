@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  engine:
+    build: .
+    container_name: ants-engine
+    volumes:
+      - .:/app
+      - ./replays:/app/replays
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Чтобы контейнер не выключался сразу, если мы хотим зайти внутert
+    tty: true
+    stdin_open: true
