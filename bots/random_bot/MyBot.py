@@ -6,7 +6,6 @@ class RandomBot:
     def do_turn(self, ants):
         destinations = []
         for a_row, a_col in ants.my_ants():
-            # try all directions randomly until one is passable and not occupied
             directions = list(AIM.keys())
             shuffle(directions)
             for direction in directions:
@@ -20,11 +19,6 @@ class RandomBot:
                 destinations.append((a_row, a_col))
 
 if __name__ == '__main__':
-    try:
-        import psyco
-        psyco.full()
-    except ImportError:
-        pass
     try:
         Ants.run(RandomBot())
     except KeyboardInterrupt:
